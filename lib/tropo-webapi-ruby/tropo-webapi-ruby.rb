@@ -1,4 +1,6 @@
 # @author Jason Goecke
+require '/Users/xiangjyu/git/tropo-webapi-ruby/lib/tropo-webapi-ruby/tropo-webapi-ruby-helpers.rb'
+require 'hashie'
 module Tropo
   class Generator 
     include Tropo::Helpers
@@ -138,16 +140,21 @@ module Tropo
     #   @option params [optional, String] :voice ""(undefined) sets the voice in a call; all prompt action within the call will inherit the same voice defined here
     # @return [String, nil] the JSON string to be passed back to Tropo or nil
     #   if the method has been called from inside a block
-    def call(params={}, &block)
+    def call142(params={}, &block)
+      #pppppppquts 'i am line 143 of tropo-webapi-ruby.rb'
       if block_given?
-        create_nested_hash('call', params)
+        #pppppppquts 'i am line 145 of tropo-webapi-ruby.rb'
+        create_nested_hash('call3332', params)
         instance_exec(&block)
         @response[:tropo] << @nested_hash
       else
+        #pppppppquts 'i am line 150 of tropo-webapi-ruby.rb'
         hash = build_action('call', params)
         @response[:tropo] << hash
       end
+      #pppppppquts 'i am line 154 of tropo-webapi-ruby.rb'
       render_response if @building.nil?
+      #puts 'i am line 156 of tropo-webapi-ruby.rb'
     end
     
     ##
@@ -320,7 +327,10 @@ module Tropo
     # @param [String or Hash] a JSON string or a Ruby Hash
     # @return [Hash] a Hash representing the formatted response from Tropo
     def parse(response)
+      #pppppppquts 'i am line 329<<<'
       response = JSON.parse(response) if response.class == String
+      #pppppppquts response
+      #pppppppquts 'i am line 329>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 
       # Check to see what type of response we are working with
       if response['session']
@@ -340,8 +350,33 @@ module Tropo
           transformed_response['result'].merge!(transform_pair(key, value))
         end
       end
+      
+      #pppppppquts 'transformed_response is <<<'
+      #pppppppquts transformed_response
+      #pppppppquts 'transformed_response is >>>'
 
       transformed_response = Hashie::Mash.new(transformed_response)
+    end
+    
+
+    ##
+    #
+    # @param [String or Hash] a JSON string or a Ruby Hash
+    # @return [Hash] a Hash representing the formatted response from Tropo
+    def getValueByActionName(hash, actionname)
+      s = hash[actionname]['value']
+      p 'actionname is:' + actionname
+      p s
+    end
+    
+    ##
+    #
+    # @param [String or Hash] a JSON string or a Ruby Hash
+    # @return [Hash] a Hash representing the formatted response from Tropo
+    def getValueByActionNameKey(hash, actionname, keyy)
+      s = hash[actionname][keyy]
+      p 'actionname is:' + actionname +'     keyy is:' + keyy
+      p s
     end
     
     ##
@@ -455,6 +490,9 @@ module Tropo
     #
     # @return [String] the JSON string to be sent to the Tropo Remote API
     def response
+      #pppppppquts 'i am line 465<<<'
+      #pppppppquts @response
+      #pppppppquts 'i am line 465>>>'
       @response.to_json
     end
     
@@ -493,7 +531,7 @@ module Tropo
     #   @option params [optional, String or Array] :allow_signals allows you to assign a signal to say which can be used with REST to interrupt the function 
     # @return [String, nil] the JSON string to be passed back to Tropo or nil
     #     if the method has been called from inside a block
-    def say(value=nil, params={})
+    def sa505y(value=nil, params={})
       
       # This will allow a string to be passed to the say, as opposed to always having to specify a :value key/pair,
       # or still allow a hash or Array to be passed as well
@@ -510,24 +548,38 @@ module Tropo
       response = { :say => Array.new }
 
       if params.kind_of? Array
+        #response = { :say => Array.new }
         params.each do |param|
           param = set_language(param)
           hash = build_action('say', param)
           response[:say] << hash
         end
       else
+        #response = { :say => Hash.new }
         params = set_language(params)
         hash = build_action('say', params)
+        #pppppppquts 'line 531 hash <<<'
+        #pppppppquts hash
+        #pppppppquts 'line 531 hash >>>'
         response[:say] << hash
+        #pppppppquts 'line 535 response <<<'
+        #pppppppquts response
+        #pppppppquts 'line 535 response >>>'
       end
       
       if @nested_hash && @nested_on_hash.nil?
+        #pppppppquts 'line 538'
         @nested_hash[@nested_name.to_sym].merge!(response)
       elsif @nested_on_hash
+        #pppppppquts 'line 541'
         @nested_on_hash[:on][@nested_on_hash_cnt].merge!(response)
         @nested_on_hash_cnt += 1
       else
+        #pppppppquts 'line 545'
         @response[:tropo] << response
+        #pppppppquts 'line 547 @response <<<'
+        #pppppppquts @response
+        #pppppppquts 'line 547 @response >>>'
         render_response if @building.nil?
       end
     end
@@ -660,5 +712,19 @@ module Tropo
       end
       render_response if @building.nil?
     end
+    
+    def generalLogSecurity(params={}, &block)
+      if block_given?
+        create_nested_hash('generalLogSecurity', params)
+        instance_exec(&block)
+        @response[:tropo] << @nested_hash
+      else
+        hash = build_action('generalLogSecurity', params)
+        @response[:tropo] << hash
+      end
+      render_response if @building.nil?
+    end
+    
+    
   end
 end

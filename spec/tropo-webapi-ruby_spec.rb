@@ -1,4 +1,10 @@
+#pppppppquts '__FILE__@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+  #pppppppquts __FILE__
+  #pppppppquts '__FILE__@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+  
+  
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+#config.expect_with(:rspec) { |c| c.syntax = :should }
 
 describe "Tropo" do
 
@@ -18,11 +24,17 @@ describe "Tropo" do
     response = Tropo::Generator.ask({ :name    => 'foo',
                                       :bargein => 'true',
                                       :timeout => 30,
-                                      :require => 'true' }) do
-                                         say     :value => 'Please say your account number'
+                                      :require => 'true'
+                                      #:say     => {:value => 'Please say your account number'}
+                                              }) do
+                                         sa505y     :value => 'Please say your account number'
                                          choices :value => '[5 DIGITS]'
                                       end
-    JSON.parse(response).should == {"tropo"=>[{"ask"=>{"name"=>"foo", "say"=>[{"value"=>"Please say your account number"}], "bargein"=>"true", "timeout"=>30, "require"=>"true", "choices"=>{"value"=>"[5 DIGITS]"}}}]}
+    #pppppppquts 'response response response response response response response response response response response response response response response response response response response response'
+    #pppppppquts response
+    #pppppppquts 'response response response response response response response response response response response response response response response response response response response response'
+    #JSON.parse(response).sort.to_h.should == {"tropo"=>[{"ask"=>{"name"=>"foo", "bargein"=>"true", "timeout"=>30, "require"=>"true", "say"=>{"value"=>"Please say your account number"}, "choices"=>{"value"=>"[5 DIGITS]"}}}]}.sort.to_h
+    JSON.parse(response).should == {"tropo"=>[{"ask"=>{"name"=>"foo", "bargein"=>"true", "timeout"=>30, "require"=>"true", "say"=>[{"value"=>"Please say your account number"}], "choices"=>{"value"=>"[5 DIGITS]"}}}]}
   end
 
   # There is currently a feature request to support an on within an ask
@@ -61,7 +73,7 @@ describe "Tropo" do
                                          :bargein => 'true',
                                          :timeout => 30,
                                          :require => 'true' }) do
-                                           say     :value => 'Please say your account number'
+                                           sa505y     :value => 'Please say your account number'
                                            choices :value => '[5 DIGITS]'
                                          end
     JSON.parse(response).should == {"tropo"=>[{"ask"=>{"name"=>"foo", "say"=>[{"value"=>"Please say your account number"}], "bargein"=>"true", "timeout"=>30, "require"=>"true", "choices"=>{"value"=>"[5 DIGITS]"}}}]}
@@ -110,8 +122,8 @@ describe "Tropo" do
                                              :mute       => false,
                                              :send_tones => false,
                                              :exit_tone  => '#' }) do
-                                               on(:event => 'join') { say :value => 'Welcome to the conference' }
-                                               on(:event => 'leave') { say :value => 'Someone has left the conference' }
+                                               on(:event => 'join') { sa505y :value => 'Welcome to the conference' }
+                                               on(:event => 'leave') { sa505y :value => 'Someone has left the conference' }
                                              end
     JSON.parse(response).should == {"tropo"=>[{"conference"=>{"name"=>"foo", "mute"=>false, "id"=>"1234", "exitTone"=>"#", "sendTones"=>false, "on"=>[{"say"=>[{"value"=>"Welcome to the conference"}], "event"=>"join"}, {"say"=>[{"value"=>"Someone has left the conference"}], "event"=>"leave"}]}}]}
   end
@@ -181,7 +193,7 @@ describe "Tropo" do
                                          :beep       => true,
                                          :send_tones => false,
                                          :exit_tone  => '#' }) do
-                                           say     :value => 'Please say your account number'
+                                           sa505y     :value => 'Please say your account number'
                                            choices :value => '[5 DIGITS]'
                                          end
     JSON.parse(response).should == {"tropo"=>[{"record"=>{"name"=>"foo", "say"=>[{"value"=>"Please say your account number"}], "beep"=>true, "url"=>"http://sendme.com/tropo", "sendTones"=>false, "exitTone"=>"#", "choices"=>{"value"=>"[5 DIGITS]"}}}]}
@@ -250,29 +262,29 @@ describe "Tropo" do
 
   # Say action tests
   it "should generate a standard 'say' JSON document when a stiring is passed" do
-    JSON.parse(Tropo::Generator.say('1234')).should == { "tropo" => [{ "say" => [{ "value" => "1234" }] }] }
+    JSON.parse(Tropo::Generator.sa505y('1234')).should == { "tropo" => [{ "say" => [{ "value" => "1234" }] }] }
   end
 
   it "should generate an error if I try to pass an integer to a 'say' action" do
     begin
-      Tropo::Generator.say(1234)
+      Tropo::Generator.sa505y(1234)
     rescue => err
-      err.to_s.should == "An invalid paramater type Fixnum has been passed"
+      err.to_s.should == "An invalid paramater type Integer has been passed"
     end
   end
 
   it "should generate a standard 'say' JSON document" do
-    JSON.parse(Tropo::Generator.say({ :value => '1234' })).should == { "tropo" => [{ "say" => [{ "value" => "1234" }] }] }
+    JSON.parse(Tropo::Generator.sa505y({ :value => '1234' })).should == { "tropo" => [{ "say" => [{ "value" => "1234" }] }] }
   end
 
   it "should generate a 'say' JSON document when an array of values is passed" do
-    response = Tropo::Generator.say([{ :value => '1234' }, { :value => 'abcd', :event => 'nomatch:1' }])
+    response = Tropo::Generator.sa505y([{ :value => '1234' }, { :value => 'abcd', :event => 'nomatch:1' }])
     JSON.parse(response).should == { "tropo" => [{ "say" => [{ "value" => "1234" }, { "value" => "abcd", "event"=>"nomatch:1" }] }] }
   end
 
   it "should generate an error if no 'value' key is passed to a 'say' request" do
     begin
-      response = Tropo::Generator.say({ :name => 'foo' })
+      response = Tropo::Generator.sa505y ({ :name => 'foo' })
     rescue => err
       err.to_s.should == "A 'value' must be provided to a 'say' action"
     end
@@ -280,7 +292,7 @@ describe "Tropo" do
 
   it "should generate a JSON document with a 'say' and an 'on'" do
     result = Tropo::Generator.new do
-      say :value => 'blah'
+      sa505y [:value => 'blah']
       on  :event => 'error', :next => 'error.json'
     end
     JSON.parse(result.response).should == {"tropo"=>[{"say"=>[{"value"=>"blah"}]}, {"on"=>{"event"=>"error", "next"=>"error.json"}}]}
@@ -333,8 +345,8 @@ describe "Tropo" do
   # General tests
   it "should generate a JSON document when a block is passed" do
     result = Tropo::Generator.new do
-      say [{ :value => '1234' }, { :value => 'abcd', :event => "nomatch:1" }]
-      say [{ :value => '0987' }, { :value => 'zyxw', :event => "nomatch:2" }]
+      sa505y [{ :value => '1234' }, { :value => 'abcd', :event => "nomatch:1" }]
+      sa505y [{ :value => '0987' }, { :value => 'zyxw', :event => "nomatch:2" }]
     end
     JSON.parse(result.response).should == {"tropo"=>[{"say"=>[{"value"=>"1234"}, {"value"=>"abcd", "event"=>"nomatch:1"}]}, {"say"=>[{"value"=>"0987"}, {"value"=>"zyxw", "event"=>"nomatch:2"}]}]}
   end
@@ -351,15 +363,15 @@ describe "Tropo" do
   end
 
   it "should build a ruby hash object when a realworld JSON string arrives" do
-    json_result = "{\"result\":{\"sessionId\":\"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20\",\"callState\":\"ANSWERED\",\"sessionDuration\":2,\"sequence\":1,\"complete\":true,\"error\":null,\"actions\":[{\"name\":\"zip\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"12345\",\"utterance\":\"1 2 3 4 5\"},{\"name\":\"days\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"1\",\"utterance\":\"1\"}]}}"
-    Tropo::Generator.parse(json_result).should == Hashie::Mash.new({:result=>{:call_state=>"ANSWERED", :complete=>true, :actions=>{:zip=>{:disposition=>"SUCCESS", :utterance=>"1 2 3 4 5", :attempts=>1, :interpretation=>"12345", :confidence=>100}, :days=>{:disposition=>"SUCCESS", :utterance=>"1", :attempts=>1, :interpretation=>"1", :confidence=>100}}, :session_duration=>2, :sequence=>1, :session_id=>"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20", :error=>nil}})
+    json_result = "{\"result\":{\"sessionId\":\"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20\",\"callState\":\"ANSWERED\",\"sessionDuration\":2,\"sequence\":1,\"complete\":true,\"error\":null,\"actions\":[{\"name\":\"yzbm\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"12345\",\"utterance\":\"1 2 3 4 5\"},{\"name\":\"days\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"1\",\"utterance\":\"1\"}]}}"
+    Tropo::Generator.parse(json_result).should == Hashie::Mash.new({:result=>{:call_state=>"ANSWERED", :complete=>true, :actions=>{:yzbm=>{:disposition=>"SUCCESS", :utterance=>"1 2 3 4 5", :attempts=>1, :interpretation=>"12345", :confidence=>100}, :days=>{:disposition=>"SUCCESS", :utterance=>"1", :attempts=>1, :interpretation=>"1", :confidence=>100}}, :session_duration=>2, :sequence=>1, :session_id=>"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20", :error=>nil}})
   end
 
   it "should see an object delcared outside of a block" do
     @@session = 'foobar'
     result = Tropo::Generator.new do
       @@new_session = @@session
-      say :value => 'blah'
+      sa505y :value => 'blah'
       on  :event => 'error', :next => 'error.json'
     end
     @@new_session.should == 'foobar'
@@ -367,21 +379,21 @@ describe "Tropo" do
 
   it "should allow you to create a Tropo::Generator object and build up a JSON request with two says" do
     tropo = Tropo::Generator.new
-    tropo.say('foo')
-    tropo.say('bar')
+    tropo.sa505y('foo')
+    tropo.sa505y('bar')
     tropo.response.should == "{\"tropo\":[{\"say\":[{\"value\":\"foo\"}]},{\"say\":[{\"value\":\"bar\"}]}]}"
   end
 
   it "should allow you to create a Tropo::Generator object and build up a JSON request with: a say, an on and a record" do
     tropo = Tropo::Generator.new
-    tropo.say 'Welcome to the app'
+    tropo.sa505y 'Welcome to the app'
     tropo.on :event => 'hangup', :next => '/hangup.json'
     tropo.record({ :name => 'foo',
-                   :url        => 'http://sendme.com/tropo',
                    :beep       => true,
                    :send_tones => false,
+                   :url        => 'http://sendme.com/tropo',
                    :exit_tone  => '#' }) do
-                     say     :value => 'Please say your account number'
+                     sa505y     :value => 'Please say your account number'
                      choices :value => '[5 DIGITS]'
                    end
     JSON.parse(tropo.response).should == {"tropo"=>[{"say"=>[{"value"=>"Welcome to the app"}]}, {"on"=>{"event"=>"hangup", "next"=>"/hangup.json"}}, {"record"=>{"name"=>"foo", "say"=>[{"value"=>"Please say your account number"}], "beep"=>true, "url"=>"http://sendme.com/tropo", "sendTones"=>false, "exitTone"=>"#", "choices"=>{"value"=>"[5 DIGITS]"}}}]}
@@ -389,14 +401,14 @@ describe "Tropo" do
 
   it "should allow you to reset the object to a fresh response after building a response first" do
     tropo = Tropo::Generator.new
-    tropo.say 'Welcome to the app'
+    tropo.sa505y 'Welcome to the app'
     tropo.on :event => 'hangup', :next => '/hangup.json'
     tropo.record({ :name => 'foo',
                    :url        => 'http://sendme.com/tropo',
                    :beep       => true,
                    :send_tones => false,
                    :exit_tone  => '#' }) do
-                     say     :value => 'Please say your account number'
+                     sa505y     :value => 'Please say your account number'
                      choices :value => '[5 DIGITS]'
                    end
     JSON.parse(tropo.response).should == {"tropo"=>[{"say"=>[{"value"=>"Welcome to the app"}]}, {"on"=>{"event"=>"hangup", "next"=>"/hangup.json"}}, {"record"=>{"name"=>"foo", "say"=>[{"value"=>"Please say your account number"}], "beep"=>true, "url"=>"http://sendme.com/tropo", "sendTones"=>false, "exitTone"=>"#", "choices"=>{"value"=>"[5 DIGITS]"}}}]}
@@ -411,13 +423,13 @@ describe "Tropo" do
   end
 
   it "should build a Ruby hash object when a result arrives in JSON with one action returned in an array" do
-    json_result = "{\"result\":{\"sessionId\":\"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20\",\"callState\":\"ANSWERED\",\"sessionDuration\":2,\"sequence\":1,\"complete\":true,\"error\":null,\"actions\":{\"name\":\"zip\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"12345\",\"utterance\":\"1 2 3 4 5\"}}}"
+    json_result = "{\"result\":{\"sessionId\":\"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20\",\"callState\":\"ANSWERED\",\"sessionDuration\":2,\"sequence\":1,\"complete\":true,\"error\":null,\"actions\":{\"name\":\"yzbm\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"12345\",\"utterance\":\"1 2 3 4 5\"}}}"
     hash = Tropo::Generator.parse(json_result)
-    hash.should == Hashie::Mash.new({:result=>{:call_state=>"ANSWERED", :complete=>true, :actions=>{:zip=>{:utterance=>"1 2 3 4 5", :attempts=>1, :interpretation=>"12345", :confidence=>100, :disposition=>"SUCCESS"}}, :session_id=>"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20", :session_duration=>2, :error=>nil, :sequence=>1}})
+    hash.should == Hashie::Mash.new({:result=>{:call_state=>"ANSWERED", :complete=>true, :actions=>{:yzbm=>{:utterance=>"1 2 3 4 5", :attempts=>1, :interpretation=>"12345", :confidence=>100, :disposition=>"SUCCESS"}}, :session_id=>"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20", :session_duration=>2, :error=>nil, :sequence=>1}})
   end
 
   it "should build a Hashie object when a result arrives in JSON" do
-    json_result = "{\"result\":{\"sessionId\":\"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20\",\"callState\":\"ANSWERED\",\"sessionDuration\":2,\"sequence\":1,\"complete\":true,\"error\":null,\"actions\":{\"name\":\"zip\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"12345\",\"utterance\":\"1 2 3 4 5\"}}}"
+    json_result = "{\"result\":{\"sessionId\":\"CCFD9C86-1DD1-11B2-B76D-B9B253E4B7FB@161.253.55.20\",\"callState\":\"ANSWERED\",\"sessionDuration\":2,\"sequence\":1,\"complete\":true,\"error\":null,\"actions\":{\"name\":\"yzbm\",\"attempts\":1,\"disposition\":\"SUCCESS\",\"confidence\":100,\"interpretation\":\"12345\",\"utterance\":\"1 2 3 4 5\"}}}"
     hash = Tropo::Generator.parse(json_result)
     hash.result.call_state.should == 'ANSWERED'
     hash[:result][:call_state].should == 'ANSWERED'
@@ -429,13 +441,13 @@ describe "Tropo" do
     t.on :event => 'error', :next => '/error.json' # For fatal programming errors. Log some details so we can fix it
     t.on :event => 'hangup', :next => '/hangup.json' # When a user hangs or call is done. We will want to log some details.
     t.on :event => 'continue', :next => '/next.json'
-    t.say "Hello"
+    t.sa505y "Hello"
     t.start_recording(:url => "http://heroku-voip.marksilver.net/post_audio_to_s3?filename=foo.wav&unique_id=bar")
     # [From this point, until stop_recording(), we will record what the caller *and* the IVR say]
-    t.say "You are now on the record."
+    t.sa505y "You are now on the record."
     # Prompt the user to incriminate themselve on-the-record
-    t.say "Go ahead, sing-along."
-    t.say "http://denalidomain.com/music/keepers/HappyHappyBirthdaytoYou-Disney.mp3"
+    t.sa505y "Go ahead, sing-along."
+    t.sa505y "http://denalidomain.com/music/keepers/HappyHappyBirthdaytoYou-Disney.mp3"
     JSON.parse(t.response).should == {"tropo"=>[{"on"=>{"event"=>"error", "next"=>"/error.json"}}, {"on"=>{"event"=>"hangup", "next"=>"/hangup.json"}}, {"on"=>{"event"=>"continue", "next"=>"/next.json"}}, {"say"=>[{"value"=>"Hello"}]}, {"startRecording"=>{"url"=>"http://heroku-voip.marksilver.net/post_audio_to_s3?filename=foo.wav&unique_id=bar"}}, {"say"=>[{"value"=>"You are now on the record."}]}, {"say"=>[{"value"=>"Go ahead, sing-along."}]}, {"say"=>[{"value"=>"http://denalidomain.com/music/keepers/HappyHappyBirthdaytoYou-Disney.mp3"}]}]}
   end
 
@@ -455,7 +467,7 @@ describe "Tropo" do
 
   it "should generate a valid JSON string for a call method" do
     json_result = "{\"tropo\":[{\"call\":{\"recording\":{\"password\":\"passwd\",\"username\":\"jose\",\"method\":\"POST\",\"url\":\"http://foobar\",\"format\":\"audio/mp3\"},\"timeout\":10,\"network\":\"SMS\",\"channel\":\"TEXT\",\"to\":\"foo\",\"from\":\"bar\",\"headers\":{\"foo\":\"foo\",\"bar\":\"bar\"},\"answerOnMedia\":false}}]}"
-    tropo = Tropo::Generator.call({ :to              => 'foo',
+    response = Tropo::Generator.call142({ :to              => 'foo',
                                     :from            => 'bar',
                                     :network         => 'SMS',
                                     :channel         => 'TEXT',
@@ -466,8 +478,13 @@ describe "Tropo" do
                                                           :method   => 'POST',
                                                           :format   => 'audio/mp3',
                                                           :username => 'jose',
-                                                          :password => 'passwd' } })
-    JSON.parse(tropo).should == JSON.parse(json_result)
+                                                          :password => 'passwd' } 
+                                    })
+                                                          
+    #pppppppquts 'tropo  tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo'                                              
+    #pppppppquts response
+    #pppppppquts 'tropo  tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo tropo'                                              
+    JSON.parse(response).should == JSON.parse(json_result)
   end
 
   it "should generate a valid JSON string for a message method" do
@@ -484,7 +501,7 @@ describe "Tropo" do
                                                              :format   => 'audio/mp3',
                                                              :username => 'jose',
                                                              :password => 'passwd' } }) do
-                                         say     :value => 'Please say your account number'
+                                         sa505y     :value => 'Please say your account number'
                                        end
     JSON.parse(tropo).should == hash_result
   end
@@ -499,7 +516,7 @@ describe "Tropo" do
                                                           :url          => 'mailto:jose@voxeo.com',
                                                           :email_format => 'encoded' },
                                       :exit_tone     => '#' }) do
-                                        say     :value => 'Please say your account number'
+                                        sa505y     :value => 'Please say your account number'
                                         choices :value => '[5 DIGITS]'
                                       end
     JSON.parse(tropo).should == hash_result
@@ -538,29 +555,29 @@ describe "Tropo" do
 
   it "should handle the setting of the voice parameter based on defaults" do
     t = Tropo::Generator.new
-    t.say 'Hi there!'
+    t.sa505y 'Hi there!'
     JSON.parse(t.response)['tropo'][0]['say'][0]['voice'].should == nil
 
     t = Tropo::Generator.new
-    t.say 'Hi there!', :voice => 'barnie'
+    t.sa505y 'Hi there!', :voice => 'barnie'
     JSON.parse(t.response)['tropo'][0]['say'][0]['voice'].should == 'barnie'
 
     t = Tropo::Generator.new(:voice => 'barnie')
-    t.say 'Hi there!'
-    t.say 'Wow!'
+    t.sa505y 'Hi there!'
+    t.sa505y 'Wow!'
     JSON.parse(t.response)['tropo'][0]['say'][0]['voice'].should == 'barnie'
     JSON.parse(t.response)['tropo'][1]['say'][0]['voice'].should == 'barnie'
 
     t = Tropo::Generator.new(:voice => 'barnie')
-    t.say 'Hi there!'
-    t.say 'Wow!', :voice => 'jack'
+    t.sa505y 'Hi there!'
+    t.sa505y 'Wow!', :voice => 'jack'
     JSON.parse(t.response)['tropo'][0]['say'][0]['voice'].should == 'barnie'
     JSON.parse(t.response)['tropo'][1]['say'][0]['voice'].should == 'jack'
 
     t = Tropo::Generator.new
     t.voice = 'barnie'
-    t.say 'Hi there!'
-    t.say 'Wow!', :voice => 'jack'
+    t.sa505y 'Hi there!'
+    t.sa505y 'Wow!', :voice => 'jack'
     JSON.parse(t.response)['tropo'][0]['say'][0]['voice'].should == 'barnie'
     JSON.parse(t.response)['tropo'][1]['say'][0]['voice'].should == 'jack'
   end
@@ -626,8 +643,8 @@ describe "Tropo" do
 
   it "should return a hash of the response object" do
     result = Tropo::Generator.new do
-      say [{ :value => '1234' }, { :value => 'abcd', :event => "nomatch:1" }]
-      say [{ :value => '0987' }, { :value => 'zyxw', :event => "nomatch:2" }]
+      sa505y [{ :value => '1234' }, { :value => 'abcd', :event => "nomatch:1" }]
+      sa505y [{ :value => '0987' }, { :value => 'zyxw', :event => "nomatch:2" }]
     end
     result.to_hash.should == { :tropo => [{ :say => [{ :value => "1234" },
                                                      { :event => "nomatch:1", :value => "abcd" }] },

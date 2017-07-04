@@ -1,24 +1,29 @@
-require 'tropo-webapi-ruby'
+#require 'tropo-webapi-ruby'
+require '/Users/xiangjyu/git/tropo-webapi-ruby/lib/tropo-webapi-ruby/tropo-webapi-ruby.rb'
 require 'sinatra'
 
 post '/index.json' do
 
   t = Tropo::Generator.new
   
-  t.call :to => "+14071234321redf",
-         :machineDetection => {
-           :introduction => "This is just a test to see if you are a human or a machine. PLease hold while we determine. Almost finished. Thank you!",
-           :voice => "Victor"
-         }
+  choices = {:value=>"[5 DIGITS]"}
+  say = {:value=>"Please say your account number"}
   
-  t.on :event => 'continue', :next => '/continue.json'
+  t.ask :say=>say,
+    :voice=>"simon",
+    :required=>true,
+    :bargein=>true,
+    :timeout=>30,
+    :name=>"foo",
+    :choices=>choices
+      
   
   headers \
-      "webapiversion"   => "ruby-frank",
+      "WebAPI-Lang-Ver"   => "ruby-frank20170628",
       "rubyversion"   => "ruby 2.4.0p0 (2016-12-24 revision 57164) [x86_64-darwin16]"
       
   "This is t.response, where is t.response"
-  t.response
+  t.response # def response  line 464
     
 end
 

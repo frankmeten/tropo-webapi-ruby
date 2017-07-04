@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sinatra'
-require '../lib/tropo-webapi-ruby'
+#require '../lib/tropo-webapi-ruby'
+require '/Users/xiangjyu/git/tropo-webapi-ruby/lib/tropo-webapi-ruby/tropo-webapi-ruby.rb'
 
 enable :sessions
 
@@ -132,7 +133,7 @@ post '/record.json' do
                                        :beep       => true,
                                        :send_tones => false,
                                        :exit_tone  => '#' }) do
-                                         say     :value => 'Please say your account number'
+                                         sa505y     :value => 'Please say your account number'
                                          choices :value => '[5 DIGITS]'
                                        end
   p response

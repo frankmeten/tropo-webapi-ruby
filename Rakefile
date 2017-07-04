@@ -21,7 +21,7 @@ begin
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+  #pppppppquts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
 require 'rspec/core/rake_task'
@@ -34,11 +34,12 @@ RSpec::Core::RakeTask.new(:rcov) do |spec|
   spec.rcov = true
 end
 
-task :spec => :check_dependencies
+#task :spec => :check_dependencies
 
 task :default => :spec
 
-require 'rake/rdoctask'
+#require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 

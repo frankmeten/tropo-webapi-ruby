@@ -45,6 +45,8 @@ module Tropo
 
         if action == 'on'
           build_elements(params)
+        elsif action == 'generalLogSecurity'
+          {action => params[:state]}
         else
           { action.to_sym => build_elements(params) }
         end
@@ -116,6 +118,8 @@ module Tropo
       # @param [Hash] the individual elements to be used to build the hash
       # @return [Hash] returns the elements properly formatted in a hash
       def build_elements(params)
+        #pppppppquts 'line 119 params is'
+        #pppppppquts params
         if params[:url]
           uri = URI.parse params[:url]
           # Check to see if it is a valid http address
@@ -135,6 +139,9 @@ module Tropo
           end
           hash.merge!({ k => v })
         end
+        #pppppppquts 'line 141 hash is <<<'
+        #pppppppquts hash
+        #pppppppquts 'line 141 hash is >>>'
         hash
       end
 

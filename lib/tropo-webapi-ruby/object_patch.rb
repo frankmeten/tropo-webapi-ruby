@@ -2,6 +2,10 @@
 class Object
   def instance_exec(*args, &block)
     mname = "__instance_exec_#{Thread.current.object_id.abs}"
+    #pppppppquts 'mname<<<'
+    #pppppppquts mname
+    #pppppppquts 'mname>>>'
+    
     class << self; self end.class_eval{ define_method(mname, &block) }
     begin
       ret = send(mname, *args)
